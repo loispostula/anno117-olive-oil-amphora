@@ -1,0 +1,7 @@
+<ModOps>
+  <!-- TODO: Do not distribute as a functional patch yet.
+       Need vanilla olive oil factory GUID, its input list and amphora product GUID.
+       Change glass to amphora in olive oil production only.
+       Leave perfume factory 1556002101 unchanged (oil 2149, glass 2117, lavender 2071).
+       Also need to register new product icon using verified Anno 117 syntax. -->
+</ModOps>

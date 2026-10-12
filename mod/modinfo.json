@@ -1,0 +1,30 @@
+{
+  "Version": "0.1.0-dev",
+  "Anno": 8,
+  "ModID": "olive-oil-amphora-compat",
+  "ModName": {
+    "English": "Olive Oil Amphora Compatibility",
+    "French": "Compatibilite Huile d’olive en amphore"
+  },
+  "Description": {
+    "English": "Experimental project; not yet playable. Reworks olive oil to use amphorae.",
+    "French": "Projet experimental non jouable pour le moment."
+  },
+  "Dependencies": {
+    "Require": [
+      "unguentarium-khayi",
+      "roman-night-lamps-koopas"
+    ],
+    "LoadAfter": [
+      "unguentarium-khayi",
+      "roman-night-lamps-koopas"
+    ]
+  },
+  "AssetsPath": "data/base/config/export/assets.xml",
+  "GameSetup": {
+    "RequiresNewGame": false,
+    "SafeToRemove": false,
+    "Multiplayer": false,
+    "Campaign": true
+  }
+}
