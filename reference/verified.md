@@ -29,6 +29,7 @@ No vanilla factory consumes a product that is also a household need (scanned all
 | Mod | File | Fact |
 |---|---|---|
 | `unguentarium-khayi` 1.6 | `unguentarium.include.xml` | factory `1556002101` inputs `2149`, `2117`, `2071`; output `1556002100`; chain `1556002102` Tier1 `4831`, `3074`, `2698` |
+| `unguentarium-khayi` 1.7 | `unguentarium.include.xml` | same factory inputs and output as 1.6; perfume chain Tier1 reordered; new Albion perfume chain `1556002103` (Tier1 `4831`, `2698`, `3074`), trigger `1556002104`, construction menu `41327`, pool `50606`; new text `1556002204`. No asset or LineId shared with this mod |
 | `roman-night-lamps-koopas` 1.2.0 | `assets.xml` | factory `2100200101` inputs `2086`, `2149`; output `2100200100`; chain `2100200202` Tier1 `4831`, `2970` |
 | `taludas-oliveoilneedsglass` 1.0.0 (declared Incompatible) | `assets.xml` | `Add="@4831/FactoryBase/FactoryInputs"` glass `2117` (StorageAmount 3); adds `3074` to `31806` and `55972` Tier1; Glass Smelter rebalance; trigger `1999100012` |
 

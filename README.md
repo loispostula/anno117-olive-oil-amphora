@@ -24,7 +24,7 @@ The new name uses LineId `2001004149` and ships in all 12 game languages. French
 
 | Mod | ModID | Version checked | Relation |
 |---|---|---|---|
-| Unguentarium – Roman Perfumery (khayi) | `unguentarium-khayi` | 1.6 | Required, loads before |
+| Unguentarium – Roman Perfumery (khayi) | `unguentarium-khayi` | 1.6, 1.7 | Required, loads before |
 | Roman Oil Lamp Maker (Koopas) | `roman-night-lamps-koopas` | 1.2.0 | Required, loads before |
 | Olive Oil Needs Glass (Taludas) | `taludas-oliveoilneedsglass` | 1.0.0 | **Incompatible** |
 
