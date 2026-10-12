@@ -127,4 +127,4 @@ media/modio-chains.png  mod.io gallery image: production chains
 
 ## Licensing
 
-Third-party mod files are not redistributed. The icon was made for this project. Anno and its names belong to their respective owners.
+[MIT](LICENSE), including the olive oil amphora icon. Third-party mod files are not redistributed. The mod.io images in `media/` show game goods icons and the Unguentarium and Oil Lamp icons; those belong to their owners and are not covered by the MIT license. Anno and its names belong to their respective owners.
