@@ -42,16 +42,18 @@ Neither required mod patches `4831`, `31806`, `55972`, `2149`, `2778` or `55961`
 Source: [jakobharder/anno-mod-loader docs](https://jakobharder.github.io/anno-mod-loader/) (`docs/modinfo.md`, `loading-order.md`, `modops/*.md`, `changes-117.md`).
 
 - `"Anno": 8` required for Anno 117; `Difficulty` mandatory (`cheat|easier|unchanged|harder`).
-- `Dependencies.Require`: missing mod → log warning. `Dependencies.LoadAfter`: listed mods load first, no warning if absent. `Dependencies.Incompatible`: active listed mod → log warning.
+- `Dependencies.Require`: missing mod → log line (`[error] <ModID>: is missing a dependency <dep>` in game, mod still loads). `Dependencies.LoadAfter`: listed mods load first, no warning if absent. `Dependencies.Incompatible`: active listed mod → log warning.
 - Asset names use `Values/Text/OasisId` → LineId. Texts are added with `<ModOp Add="/TextExport/Texts[1]">` in `data/base/config/gui/texts_<language>.xml`. Personal LineId range: 2.001.000.000 – 2.001.009.999.
 - Short ModOps: `GUID="x" Add="Path"` where the path skips `/Values/`. `Condition` is relative to the GUID, `!` negates.
 - `Merge` adds or replaces child nodes, never removes.
 - Assets path: `data/base/config/export/assets.xml`. Mods folder: `<user>/Anno 117/mods/`. Log: `<user documents>/Anno 117/mods/mod-loader.log`.
 
-## Confirmed in game (0.1.2, Unguentarium 1.7)
+## Confirmed in game (0.1.2 and 0.1.3, Unguentarium 1.7)
 
 - Amphorae work as a factory input without extra config.
 - A loose 256×256 PNG under `data/<mod>/ui/` renders as a product icon.
 - Renaming via `Values/Text/OasisId` on `2149` also renames it in the residence needs panel.
 - Production chain views and the build menu show building / chain `IconFilename`, not the product icon: `4831`, `31806` and `55972` need their own icon patch.
 - Unguentarium patches its own chain `1556002102` (`<Locked />`), which does not touch `ProductionChain/Tier1`.
+- `LoadAfter` works: `mod-loader.log` loads `unguentarium-khayi@1.7` right before `olive-oil-amphora-compat@0.1.3`, and no ModOp of ours logs a warning.
+- `IconFilename` on `4831`, `31806` and `55972` changes the build menu and chain view icons; the Tier2 additions on `1556002102` / `1556002103` show the Amphorae Workshop in the perfume chains (0.1.3).
