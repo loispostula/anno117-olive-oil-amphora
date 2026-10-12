@@ -24,11 +24,11 @@ The new name uses LineId `2001004149` and ships in all 12 game languages. French
 
 | Mod | ModID | Version checked | Relation |
 |---|---|---|---|
-| Unguentarium – Roman Perfumery (khayi) | `unguentarium-khayi` | 1.6, 1.7 | Required, loads before |
+| Unguentarium – Roman Perfumery (khayi) | `unguentarium-khayi` | 1.6, 1.7 | Optional, loads before |
 | Roman Oil Lamp Maker (Koopas) | `roman-night-lamps-koopas` | 1.2.0 | Optional, loads before |
 | Olive Oil Needs Glass (Taludas) | `taludas-oliveoilneedsglass` | 1.0.0 | **Incompatible** |
 
-- Recipes of the required mods are not patched. The only upstream assets touched are Unguentarium's perfume chain views (`1556002102`, and `1556002103` from 1.7), which get the Amphorae Workshop under the Olive Press. Display only. A missing required mod (Unguentarium) only logs `[error] olive-oil-amphora-compat: is missing a dependency <ModID>` in `mod-loader.log`; the mod still loads.
+- Both mods are optional: without them the Olive Press, the rename and the olive oil chain views work on vanilla alone. Their recipes are not patched. The only upstream assets touched are Unguentarium's perfume chain views (`1556002102`, and `1556002103` from 1.7), which get the Amphorae Workshop under the Olive Press. Display only, skipped when Unguentarium is absent.
 - This mod replaces Taludas' "Olive Oil Needs Glass". Together they would give olive oil both glass and amphorae. Disable Taludas' mod. It declares itself `SafeToRemove`.
 - Any other mod that changes Olive Press `4831` inputs or the olive oil product text may conflict.
 
@@ -36,7 +36,7 @@ The new name uses LineId `2001004149` and ships in all 12 game languages. French
 
 1. Download `olive-oil-amphora-compat-<version>.zip` from the GitHub Releases or mod.io.
 2. Extract it into `<user>/Anno 117/mods/` (for example `Documents/Anno 117/mods/`), so you get `mods/[Gameplay] Olive Oil in Amphorae/modinfo.json`.
-3. Install and enable the required mods. Disable "Olive Oil Needs Glass" (Taludas).
+3. Optionally install Unguentarium and Roman Oil Lamp Maker. Disable "Olive Oil Needs Glass" (Taludas).
 4. Start the game and enable the mod.
 
 Existing saves: olive presses that are already built need amphorae from the moment the mod is enabled.
@@ -79,7 +79,7 @@ UPSTREAM_DIR=~/Downloads python3 -m unittest discover -s tests   # + checks agai
 python3 tools/package.py                       # reproducible ZIP in dist/
 ```
 
-Upstream checks read the ZIPs in `UPSTREAM_DIR` (matched by the `ModID` in each `modinfo.json`). They verify that the perfume and lamp recipes match, that the required mods patch none of our assets, and that no upstream text uses our LineId.
+Upstream checks read the ZIPs in `UPSTREAM_DIR` (matched by the `ModID` in each `modinfo.json`). They verify that the perfume and lamp recipes match, that those mods patch none of our assets, and that no upstream text uses our LineId.
 
 ### What the tests prove
 

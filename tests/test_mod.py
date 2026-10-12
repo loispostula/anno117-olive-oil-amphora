@@ -214,8 +214,8 @@ class StaticTests(unittest.TestCase):
         for key in ("ModName", "Category", "Description"):
             self.assertTrue(info[key]["English"])
         deps = info["Dependencies"]
-        self.assertEqual(deps["Require"], ["unguentarium-khayi"])
-        self.assertEqual(deps["Optional"], ["roman-night-lamps-koopas"])
+        self.assertEqual(deps["Require"], [])
+        self.assertEqual(deps["Optional"], ["unguentarium-khayi", "roman-night-lamps-koopas"])
         self.assertTrue(set(deps["Require"] + deps["Optional"]) <= set(deps["LoadAfter"]), "dependencies must load first")
         self.assertEqual(deps["Incompatible"], [TALUDAS])
         self.assertNotIn(TALUDAS, deps["Optional"] + deps["LoadAfter"])
@@ -347,7 +347,7 @@ class UpstreamTests(unittest.TestCase):
         self.assertIn("roman-night-lamps-koopas", self.mods)
         self.assertEqual(self.factory_inputs("roman-night-lamps-koopas", LAMP_WORKSHOP), [CLAY, OLIVE_OIL])
 
-    def test_no_patch_conflicts_with_required_mods(self):
+    def test_no_patch_conflicts_with_supported_mods(self):
         for mod_id in ("unguentarium-khayi", "roman-night-lamps-koopas"):
             # Unguentarium locks its own chain views; our display patch on them is checked against its real files.
             self.assertEqual(self.patched_guids(mod_id) & (PATCHED_GUIDS - set(PERFUME_CHAINS)), set(), mod_id)

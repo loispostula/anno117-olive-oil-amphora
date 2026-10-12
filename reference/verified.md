@@ -35,7 +35,7 @@ No vanilla factory consumes a product that is also a household need (scanned all
 
 Upstream LineIds in use: `2001000010`, `2001000011` (lamps), `2001000020`–`2001000022` (perfume). This mod uses `2001004149`.
 
-Neither required mod patches `4831`, `31806`, `55972`, `2149`, `2778` or `55961` (checked by `UpstreamTests`).
+Neither supported mod patches `4831`, `31806`, `55972`, `2149`, `2778` or `55961` (checked by `UpstreamTests`).
 
 ## Mod loader
 

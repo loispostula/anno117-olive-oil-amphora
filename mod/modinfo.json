@@ -1,5 +1,5 @@
 {
-  "Version": "0.1.4",
+  "Version": "0.1.5",
   "Anno": 8,
   "ModID": "olive-oil-amphora-compat",
   "Difficulty": "harder",
@@ -10,10 +10,9 @@
     "Campaign": true
   },
   "Dependencies": {
-    "Require": [
-      "unguentarium-khayi"
-    ],
+    "Require": [],
     "Optional": [
+      "unguentarium-khayi",
       "roman-night-lamps-koopas"
     ],
     "LoadAfter": [
