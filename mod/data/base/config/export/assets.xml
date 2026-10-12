@@ -49,4 +49,39 @@
   <ModOp GUID="55961" Merge="Standard">
     <IconFilename>data/olive-oil-amphora/ui/icon_olive_oil_amphora.png</IconFilename>
   </ModOp>
+  <!-- Production chain views and the build menu show building / chain icons, not product icons. -->
+  <ModOp GUID="4831" Merge="Standard">
+    <IconFilename>data/olive-oil-amphora/ui/icon_olive_oil_amphora.png</IconFilename>
+  </ModOp>
+  <ModOp GUID="31806" Merge="Standard">
+    <IconFilename>data/olive-oil-amphora/ui/icon_olive_oil_amphora.png</IconFilename>
+  </ModOp>
+  <ModOp GUID="55972" Merge="Standard">
+    <IconFilename>data/olive-oil-amphora/ui/icon_olive_oil_amphora.png</IconFilename>
+  </ModOp>
+
+  <!--
+    Unguentarium perfume chain views: show the Amphorae Workshop under the Olive Press.
+    1556002102 (Latium) exists since 1.6, 1556002103 (Albion) since 1.7. The recipe is not touched.
+  -->
+  <Group Condition="@1556002102">
+    <ModOp GUID="1556002102" Add="ProductionChain/Tier1/Item[Building='4831']"
+           Condition="!ProductionChain/Tier1/Item[Building='4831']/Tier2">
+      <Tier2 />
+    </ModOp>
+    <ModOp GUID="1556002102" Add="ProductionChain/Tier1/Item[Building='4831']/Tier2"
+           Condition="!ProductionChain/Tier1/Item[Building='4831']/Tier2/Item[Building='3199']">
+      <Item><Building>3199</Building></Item>
+    </ModOp>
+  </Group>
+  <Group Condition="@1556002103">
+    <ModOp GUID="1556002103" Add="ProductionChain/Tier1/Item[Building='4831']"
+           Condition="!ProductionChain/Tier1/Item[Building='4831']/Tier2">
+      <Tier2 />
+    </ModOp>
+    <ModOp GUID="1556002103" Add="ProductionChain/Tier1/Item[Building='4831']/Tier2"
+           Condition="!ProductionChain/Tier1/Item[Building='4831']/Tier2/Item[Building='3199']">
+      <Item><Building>3199</Building></Item>
+    </ModOp>
+  </Group>
 </ModOps>

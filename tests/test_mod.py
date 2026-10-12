@@ -22,8 +22,9 @@ import package  # noqa: E402
 
 OLIVE_PRESS, OLIVES, OLIVE_OIL, AMPHORAE, GLASS, LAVENDER, CLAY = "4831", "2072", "2149", "31700", "2117", "2071", "2086"
 # Every asset this mod may touch. Sources: anno-mods/anno-117-calculator params, Taludas' patch.
-PATCHED_GUIDS = {OLIVE_PRESS, "31806", "55972", OLIVE_OIL, "2778", "55961"}
-PERFUMERY, LAMP_WORKSHOP = "1556002101", "2100200101"
+PERFUME_CHAINS = ("1556002102", "1556002103")  # Unguentarium chain views, display only
+PATCHED_GUIDS = {OLIVE_PRESS, "31806", "55972", OLIVE_OIL, "2778", "55961", *PERFUME_CHAINS}
+PERFUMERY, LAMP_WORKSHOP, AMPHORA_WORKSHOP = "1556002101", "2100200101", "3199"
 TALUDAS = "taludas-oliveoilneedsglass"
 LINE_ID = "2001004149"
 ICON = "data/olive-oil-amphora/ui/icon_olive_oil_amphora.png"
@@ -50,6 +51,26 @@ VANILLA_FIXTURE = f"""<AssetList>
   <Asset><Values><Standard><GUID>55961</GUID><IconFilename>vanilla.png</IconFilename></Standard></Values></Asset>
 </AssetList>"""
 
+# Shape of Unguentarium 1.7's perfume chain views (1.6 has only 1556002102).
+UNGUENTARIUM_CHAINS = f"""<AssetList>
+  <Asset><Values><Standard><GUID>1556002102</GUID></Standard><ProductionChain><Building>{PERFUMERY}</Building><Tier1>
+    <Item><Building>{OLIVE_PRESS}</Building><Tier2><Item><Building>2699</Building></Item></Tier2></Item>
+    <Item><Building>2698</Building></Item>
+    <Item><Building>3074</Building><Tier2><Item><Building>2958</Building></Item></Tier2></Item>
+  </Tier1></ProductionChain></Values></Asset>
+  <Asset><Values><Standard><GUID>1556002103</GUID></Standard><ProductionChain><Building>{PERFUMERY}</Building><Tier1>
+    <Item><Building>{OLIVE_PRESS}</Building></Item><Item><Building>2698</Building></Item><Item><Building>3074</Building></Item>
+  </Tier1></ProductionChain></Values></Asset>
+</AssetList>"""
+
+
+def fixture(*chain_guids):
+    """Vanilla fixture plus the given Unguentarium chain assets."""
+    doc = ET.fromstring(VANILLA_FIXTURE)
+    doc.extend(a for a in ET.fromstring(UNGUENTARIUM_CHAINS) if a.findtext("Values/Standard/GUID") in chain_guids)
+    return doc
+
+
 def op_type(op):
     found = [t for t in OP_TYPES if t in op.attrib]
     if len(found) != 1:
@@ -75,25 +96,36 @@ def select(values, path):
     return values.findall(path) if path else [values]
 
 
+def condition_holds(doc, op, cond):
+    negate = cond.startswith("!")
+    guid, path = op_target(op, cond.lstrip("!"))
+    values = find_values(doc, guid)
+    return bool(values is not None and select(values, path)) != negate
+
+
 def apply_modops(doc, modops, only_guids=None):
-    """Minimal ModOp interpreter for the subset used here. Returns loader-style warnings."""
+    """Minimal ModOp interpreter for the subset used here (ModOp, Group). Returns loader-style warnings."""
     warnings = []
-    for op in modops.iter("ModOp"):
+    for node in modops:
+        if node.tag == "Group":
+            if condition_holds(doc, node, node.get("Condition")):
+                warnings += apply_modops(doc, node, only_guids)
+            continue
+        if node.tag != "ModOp":
+            continue
+        op = node
         kind = op_type(op)
         guid, path = op_target(op, op.get(kind))
         if only_guids is not None and guid not in only_guids:
+            continue
+        # Positive conditions skip silently, even on a missing asset; negative ones still warn.
+        cond = op.get("Condition")
+        if cond and not condition_holds(doc, op, cond):
             continue
         values = find_values(doc, guid)
         if values is None:
             warnings.append(f"asset {guid} not found")
             continue
-        cond = op.get("Condition")
-        if cond:
-            negate = cond.startswith("!")
-            cguid, cpath = op_target(op, cond.lstrip("!"))
-            cvalues = find_values(doc, cguid)
-            if bool(cvalues is not None and select(cvalues, cpath)) == negate:
-                continue
         targets = select(values, path)
         if not targets:
             warnings.append(f"{kind} {guid}/{path}: no match")
@@ -117,6 +149,11 @@ def apply_modops(doc, modops, only_guids=None):
 
 def inputs(doc, guid):
     return [i.findtext("Product") for i in find_values(doc, guid).findall("FactoryBase/FactoryInputs/Item")]
+
+
+def under_olive_press(doc, guid):
+    return [i.findtext("Building") for i in find_values(doc, guid).findall(
+        f"ProductionChain/Tier1/Item[Building='{OLIVE_PRESS}']/Tier2/Item")]
 
 
 def tier1(doc, guid):
@@ -152,15 +189,18 @@ class StaticTests(unittest.TestCase):
     def test_assets_xml_structure(self):
         root = our_modops()
         self.assertEqual(root.tag, "ModOps")
-        ops = list(root)
-        self.assertTrue(ops)
-        for op in ops:
-            self.assertEqual(op.tag, "ModOp")
+        self.assertTrue(list(root))
+        for node in root:
+            self.assertIn(node.tag, ("ModOp", "Group"))
+            if node.tag == "Group":
+                self.assertRegex(node.get("Condition", ""), r"^@\d+$", "groups only guard on an asset existing")
+                self.assertTrue(all(op.tag == "ModOp" for op in node))
+        for op in root.iter("ModOp"):
             self.assertIn("GUID", op.attrib, "use GUID-scoped ModOps only")
             op_type(op)
 
     def test_patch_scope_is_exactly_the_expected_assets(self):
-        touched = {op.get("GUID") for op in our_modops()}
+        touched = {op.get("GUID") for op in our_modops().iter("ModOp")}
         self.assertEqual(touched, PATCHED_GUIDS)
         self.assertNotIn(PERFUMERY, touched)
         self.assertNotIn(LAMP_WORKSHOP, touched)
@@ -215,7 +255,7 @@ class StaticTests(unittest.TestCase):
 
 class PatchSimulationTests(unittest.TestCase):
     def setUp(self):
-        self.doc = ET.fromstring(VANILLA_FIXTURE)
+        self.doc = fixture(*PERFUME_CHAINS)
 
     def assert_final_state(self):
         self.assertEqual(sorted(inputs(self.doc, OLIVE_PRESS)), sorted([OLIVES, AMPHORAE]))
@@ -223,14 +263,32 @@ class PatchSimulationTests(unittest.TestCase):
         self.assertNotIn("3074", tier1(self.doc, "55972"))
         self.assertEqual(tier1(self.doc, "31806").count("3199"), 1)
         self.assertEqual(tier1(self.doc, "55972").count("55962"), 1)
-        for guid in (OLIVE_OIL, "2778", "55961"):
+        for guid in (OLIVE_OIL, "2778", "55961", OLIVE_PRESS, "31806", "55972"):
             icons = find_values(self.doc, guid).findall("Standard/IconFilename")
             self.assertEqual([i.text for i in icons], [ICON])
         self.assertEqual([e.text for e in find_values(self.doc, OLIVE_OIL).findall("Text/OasisId")], [LINE_ID])
         self.assertEqual([o.findtext("Product") for o in find_values(self.doc, OLIVE_PRESS).findall(
             "FactoryBase/FactoryOutputs/Item")], [OLIVE_OIL], "output GUID must stay 2149")
+        for guid in PERFUME_CHAINS:
+            if find_values(self.doc, guid) is not None:
+                self.assertEqual(under_olive_press(self.doc, guid).count(AMPHORA_WORKSHOP), 1, guid)
 
     def test_vanilla(self):
+        self.assertEqual(apply_modops(self.doc, our_modops()), [])
+        self.assert_final_state()
+
+    def test_perfume_chains(self):
+        apply_modops(self.doc, our_modops())
+        self.assertEqual(under_olive_press(self.doc, "1556002102"), ["2699", AMPHORA_WORKSHOP])
+        self.assertEqual(under_olive_press(self.doc, "1556002103"), [AMPHORA_WORKSHOP])
+
+    def test_unguentarium_1_6_without_albion_chain(self):
+        self.doc = fixture("1556002102")
+        self.assertEqual(apply_modops(self.doc, our_modops()), [])
+        self.assert_final_state()
+
+    def test_without_unguentarium(self):
+        self.doc = fixture()
         self.assertEqual(apply_modops(self.doc, our_modops()), [])
         self.assert_final_state()
 
@@ -290,7 +348,16 @@ class UpstreamTests(unittest.TestCase):
 
     def test_no_patch_conflicts_with_required_mods(self):
         for mod_id in ("unguentarium-khayi", "roman-night-lamps-koopas"):
-            self.assertEqual(self.patched_guids(mod_id) & PATCHED_GUIDS, set(), mod_id)
+            # Unguentarium locks its own chain views; our display patch on them is checked against its real files.
+            self.assertEqual(self.patched_guids(mod_id) & (PATCHED_GUIDS - set(PERFUME_CHAINS)), set(), mod_id)
+
+    def test_perfume_chain_patch_on_real_unguentarium(self):
+        doc = ET.fromstring("<AssetList/>")
+        doc.extend(copy.deepcopy(a) for r in self.mods["unguentarium-khayi"] for a in r.iter("Asset"))
+        self.assertEqual(apply_modops(doc, our_modops(), only_guids=set(PERFUME_CHAINS)), [])
+        self.assertEqual(under_olive_press(doc, "1556002102").count(AMPHORA_WORKSHOP), 1)
+        if find_values(doc, "1556002103") is not None:
+            self.assertEqual(under_olive_press(doc, "1556002103"), [AMPHORA_WORKSHOP])
 
     def test_line_id_not_used_upstream(self):
         for mod_id, roots in self.mods.items():
