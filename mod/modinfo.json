@@ -1,5 +1,5 @@
 {
-  "Version": "0.1.2",
+  "Version": "0.1.3",
   "Anno": 8,
   "ModID": "olive-oil-amphora-compat",
   "Difficulty": "harder",
@@ -38,7 +38,7 @@
   },
   "KnownIssues": [
     {
-      "English": "Not yet verified in game. See README for the test checklist."
+      "English": "Roman Oil Lamp Maker not yet tested in game."
     }
   ],
   "AssetsPath": "data/base/config/export/assets.xml"

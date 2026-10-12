@@ -2,7 +2,7 @@
 
 Compatibility mod for Anno 117: Pax Romana. Olive oil is pressed into amphorae and becomes the **Olive Oil Amphora**, so glass is only needed once, in the perfume chain.
 
-**Status: statically validated, not yet tested in game.** See [In-game test checklist](#in-game-test-checklist).
+**Status: tested in game on 0.1.2 with Unguentarium 1.7** (Roman Oil Lamp Maker not tested yet). See [In-game test checklist](#in-game-test-checklist).
 
 ## Production chains
 
@@ -12,10 +12,10 @@ Compatibility mod for Anno 117: Pax Romana. Olive oil is pressed into amphorae a
 | Unguentarium `1556002101` | Olive Oil Amphora + Glass + Lavender → Perfume (recipe unchanged) |
 | Oil Lamp Workshop `2100200101` | Clay + Olive Oil Amphora → Oil Lamp (recipe unchanged) |
 
-The Olive Oil Amphora is the vanilla olive oil product (`2149`), renamed and given an amphora icon. The GUID is kept on purpose:
+The Olive Oil Amphora is the vanilla olive oil product (`2149`), renamed and given an amphora icon (transparent background, like vanilla goods). The Olive Press and the olive oil production chain tabs use the same icon. The GUID is kept on purpose:
 
 - Roman and Albion residents keep their olive oil need (`2778`, `55961`). Those needs get the amphora icon too.
-- Perfume and oil lamps keep consuming `2149` without any patch to those mods.
+- Perfume and oil lamps keep consuming `2149`; their recipes are not patched.
 - Warehouses, trade and existing saves keep working.
 
 The new name uses LineId `2001004149` and ships in all 12 game languages. French, English and German are proofread. The other languages are best-effort translations.
@@ -28,7 +28,7 @@ The new name uses LineId `2001004149` and ships in all 12 game languages. French
 | Roman Oil Lamp Maker (Koopas) | `roman-night-lamps-koopas` | 1.2.0 | Required, loads before |
 | Olive Oil Needs Glass (Taludas) | `taludas-oliveoilneedsglass` | 1.0.0 | **Incompatible** |
 
-- The required mods are not patched. This mod only touches vanilla assets. A missing required mod only produces a warning in `mod-loader.log`.
+- Recipes of the required mods are not patched. The only upstream assets touched are Unguentarium's perfume chain views (`1556002102`, and `1556002103` from 1.7), which get the Amphorae Workshop under the Olive Press. Display only. A missing required mod only produces a warning in `mod-loader.log`.
 - This mod replaces Taludas' "Olive Oil Needs Glass". Together they would give olive oil both glass and amphorae. Disable Taludas' mod. It declares itself `SafeToRemove`.
 - Any other mod that changes Olive Press `4831` inputs or the olive oil product text may conflict.
 
@@ -43,31 +43,31 @@ Existing saves: olive presses that are already built need amphorae from the mome
 
 ## In-game test checklist
 
-Run with Unguentarium and Roman Oil Lamp Maker enabled and Taludas' mod disabled.
+Run with Unguentarium and Roman Oil Lamp Maker enabled and Taludas' mod disabled. Results from the first test (0.1.2, Unguentarium 1.7) in brackets.
 
-- [ ] `<user documents>/Anno 117/mods/mod-loader.log` has no warnings or errors that mention `olive-oil-amphora-compat`.
-- [ ] Olive Press info panel shows two inputs: Olives and Amphorae. No glass.
-- [ ] An Olive Press with olives and amphorae in reach produces "Olive Oil Amphora".
-- [ ] An Olive Press without amphorae stops and reports a missing input.
-- [ ] The product is named "Amphore d'huile d'olive" in French, "Olive Oil Amphora" in English, with the amphora icon, in the warehouse, the trade screen and the residence needs panel, in Latium and Albion.
-- [ ] Residences still consume amphorae and olive oil amphorae (both household needs work).
-- [ ] Latium olive oil production chain view lists the Amphorae Workshop (with Clay Pit and Resin).
-- [ ] Albion olive oil production chain view lists the Albion Amphorae Workshop.
+- [ ] `<user documents>/Anno 117/mods/mod-loader.log` has no warnings or errors that mention `olive-oil-amphora-compat`. (log not sent yet)
+- [x] Olive Press info panel shows two inputs: Olives and Amphorae. No glass.
+- [x] An Olive Press with olives and amphorae in reach produces "Olive Oil Amphora".
+- [x] An Olive Press without amphorae stops and reports a missing input.
+- [x] The product is named "Amphore d'huile d'olive" / "Olive Oil Amphora", with the amphora icon, in the warehouse, the trade screen and the residence needs panel, in Latium and Albion.
+- [x] Residences still consume amphorae and olive oil amphorae (both household needs work).
+- [x] Latium olive oil production chain view lists the Amphorae Workshop (with Clay Pit and Resin).
+- [x] Albion olive oil production chain view lists the Albion Amphorae Workshop (not buildable there, as in vanilla).
+- [ ] Olive oil build menu tab and the Olive Press show the amphora icon. (fixed in 0.1.3, failed in 0.1.2)
+- [ ] Unguentarium perfume chain views (Latium and Albion) show the amphora icon on the Olive Press and the Amphorae Workshop under it. (fixed in 0.1.3, failed in 0.1.2)
 - [ ] Unguentarium needs Olive Oil Amphora + Glass + Lavender and produces perfume.
-- [ ] Oil Lamp Workshop needs Clay + Olive Oil Amphora and produces oil lamps.
-- [ ] An existing save loads, and its olive presses switch to the new recipe.
+- [ ] Oil Lamp Workshop needs Clay + Olive Oil Amphora and produces oil lamps. (not tested, mod not used)
+- [x] An existing save loads, and its olive presses switch to the new recipe.
 - [ ] With Taludas' mod also enabled, `mod-loader.log` reports the incompatibility.
 
 ## Unresolved issues
 
-- **Not tested in game.** All checks so far are static checks or simulations.
-- **Amphorae as a factory input.** No vanilla factory consumes a household-need good. The two required mods already consume olive oil, which is also a household-need good, and they are published. So this is expected to work but is not proven.
+- **Partially tested in game.** See the checklist. Roman Oil Lamp Maker and the loader log are still unchecked.
+- **Amphorae as a factory input.** Confirmed in game: the Olive Press consumes amphorae and stops without them.
 - **Vanilla XML shape.** The GUIDs come from game data exported by [anno-117-calculator](https://github.com/anno-mods/anno-117-calculator). The XML paths (`FactoryBase/FactoryInputs`, `ProductionChain/Tier1`) are the ones Taludas' published mod patches. `Values/Text/OasisId` is the pattern Unguentarium uses for its products. The raw vanilla `assets.xml` has not been inspected.
-- **Need names.** The household need assets (`2778`, `55961`) may have their own text. If the residence panel still says "Olive Oil", they need the same rename.
 - **LineId range.** `2001004149` sits in the shared personal range (2.001.000.000 – 2.001.009.999). Reserve a range on [GuidRanges](https://github.com/anno-mods/GuidRanges) before a wide public release.
 - **Input storage.** The Olive Press stores 3 amphorae (`StorageAmount`, same as Taludas' glass). The vanilla value for olives is unknown.
-- **Icon style.** The icon has a dark red rounded background. Vanilla goods icons have a transparent background.
-- **Albion chain view.** It uses the Albion Amphorae Workshop (`55962`, Mud Pit `5848`, Resin `31761`). Not verified visually.
+- **Perfume chain views.** Only the Amphorae Workshop is added under the Olive Press (no Clay Pit / Resin level below it).
 
 ## Development
 

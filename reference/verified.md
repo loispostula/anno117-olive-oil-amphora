@@ -48,7 +48,10 @@ Source: [jakobharder/anno-mod-loader docs](https://jakobharder.github.io/anno-mo
 - `Merge` adds or replaces child nodes, never removes.
 - Assets path: `data/base/config/export/assets.xml`. Mods folder: `<user>/Anno 117/mods/`. Log: `<user documents>/Anno 117/mods/mod-loader.log`.
 
-## Hypotheses
+## Confirmed in game (0.1.2, Unguentarium 1.7)
 
-- Amphorae work as a factory input without extra config. Basis: product records have no end-product flag. Both required mods consume `2149`, which is also a household-need good.
-- A loose 256×256 PNG under `data/<mod>/ui/` renders as a product icon. Basis: Unguentarium (256×256) and Oil Lamp (120×120) both ship one this way.
+- Amphorae work as a factory input without extra config.
+- A loose 256×256 PNG under `data/<mod>/ui/` renders as a product icon.
+- Renaming via `Values/Text/OasisId` on `2149` also renames it in the residence needs panel.
+- Production chain views and the build menu show building / chain `IconFilename`, not the product icon: `4831`, `31806` and `55972` need their own icon patch.
+- Unguentarium patches its own chain `1556002102` (`<Locked />`), which does not touch `ProductionChain/Tier1`.
