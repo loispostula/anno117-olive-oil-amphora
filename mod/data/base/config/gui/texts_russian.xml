@@ -1,0 +1,8 @@
+<ModOps>
+  <ModOp Add="/TextExport/Texts[1]">
+    <Text>
+      <LineId>2001004149</LineId>
+      <Text>Амфора оливкового масла</Text>
+    </Text>
+  </ModOp>
+</ModOps>

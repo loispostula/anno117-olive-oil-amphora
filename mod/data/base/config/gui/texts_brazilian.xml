@@ -1,0 +1,8 @@
+<ModOps>
+  <ModOp Add="/TextExport/Texts[1]">
+    <Text>
+      <LineId>2001004149</LineId>
+      <Text>Ânfora de azeite</Text>
+    </Text>
+  </ModOp>
+</ModOps>

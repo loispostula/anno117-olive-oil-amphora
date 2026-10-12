@@ -1,7 +1,52 @@
 <ModOps>
-  <!-- TODO: Do not distribute as a functional patch yet.
-       Need vanilla olive oil factory GUID, its input list and amphora product GUID.
-       Change glass to amphora in olive oil production only.
-       Leave perfume factory 1556002101 unchanged (oil 2149, glass 2117, lavender 2071).
-       Also need to register new product icon using verified Anno 117 syntax. -->
+  <!-- Olive Press (4831): olives + amphorae -> olive oil amphora. -->
+  <ModOp GUID="4831" Add="FactoryBase/FactoryInputs"
+         Condition="!FactoryBase/FactoryInputs/Item[Product='31700']">
+    <Item>
+      <Product>31700</Product>
+      <Amount>1</Amount>
+      <StorageAmount>3</StorageAmount>
+    </Item>
+  </ModOp>
+
+  <!-- Production chain views: Latium (31806) and Albion (55972) olive oil. -->
+  <ModOp GUID="31806" Add="ProductionChain/Tier1"
+         Condition="!ProductionChain/Tier1/Item[Building='3199']">
+    <Item>
+      <Building>3199</Building>
+      <Tier2>
+        <Item><Building>2970</Building></Item>
+        <Item><Building>31752</Building></Item>
+      </Tier2>
+    </Item>
+  </ModOp>
+  <ModOp GUID="55972" Add="ProductionChain/Tier1"
+         Condition="!ProductionChain/Tier1/Item[Building='55962']">
+    <Item>
+      <Building>55962</Building>
+      <Tier2>
+        <Item><Building>5848</Building></Item>
+        <Item><Building>31761</Building></Item>
+      </Tier2>
+    </Item>
+  </ModOp>
+
+  <!--
+    Olive oil (2149) becomes "Olive Oil Amphora". Same GUID on purpose: Roman / Albion household
+    needs, Unguentarium perfume and the oil lamp workshop keep consuming it unchanged.
+  -->
+  <ModOp GUID="2149" Merge="">
+    <Text>
+      <OasisId>2001004149</OasisId>
+    </Text>
+  </ModOp>
+  <ModOp GUID="2149" Merge="Standard">
+    <IconFilename>data/olive-oil-amphora/ui/icon_olive_oil_amphora.png</IconFilename>
+  </ModOp>
+  <ModOp GUID="2778" Merge="Standard">
+    <IconFilename>data/olive-oil-amphora/ui/icon_olive_oil_amphora.png</IconFilename>
+  </ModOp>
+  <ModOp GUID="55961" Merge="Standard">
+    <IconFilename>data/olive-oil-amphora/ui/icon_olive_oil_amphora.png</IconFilename>
+  </ModOp>
 </ModOps>
