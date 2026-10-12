@@ -214,8 +214,9 @@ class StaticTests(unittest.TestCase):
         for key in ("ModName", "Category", "Description"):
             self.assertTrue(info[key]["English"])
         deps = info["Dependencies"]
-        self.assertEqual(set(deps["Require"]), {"unguentarium-khayi", "roman-night-lamps-koopas"})
-        self.assertTrue(set(deps["Require"]) <= set(deps["LoadAfter"]), "required mods must load first")
+        self.assertEqual(deps["Require"], ["unguentarium-khayi"])
+        self.assertEqual(deps["Optional"], ["roman-night-lamps-koopas"])
+        self.assertTrue(set(deps["Require"] + deps["Optional"]) <= set(deps["LoadAfter"]), "dependencies must load first")
         self.assertEqual(deps["Incompatible"], [TALUDAS])
         self.assertNotIn(TALUDAS, deps["Optional"] + deps["LoadAfter"])
         self.assertTrue((MOD / info["AssetsPath"]).is_file())
