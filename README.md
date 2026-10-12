@@ -107,6 +107,7 @@ mod.io upload runs only when these are set in the repository settings:
 | Variable | `MODIO_GAME_ID` | numeric Anno 117 game ID on mod.io |
 | Variable | `MODIO_MOD_ID` | numeric ID of a mod page you own |
 | Secret | `MODIO_TOKEN` | mod.io OAuth token with write scope |
+| Secret | `MODIO_DOMAIN` | API subdomain from mod.io/me/access, `<this>.modapi.io` (`api.mod.io` is deprecated) |
 
 Create the mod.io page manually first (logo: `media/modio-logo.png`). `MODIO_TOKEN` must be an OAuth 2 access token with read+write scope from mod.io/me/access: an API key is read-only and cannot upload. Release flow: bump `Version` in `mod/modinfo.json`, commit, tag `v<version>`, push the tag.
 

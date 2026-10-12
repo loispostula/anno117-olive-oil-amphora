@@ -61,8 +61,11 @@ jobs:
           fi
       - name: Upload to mod.io
         if: vars.MODIO_GAME_ID != '' && vars.MODIO_MOD_ID != ''
-        # v3.0.0
+        # v3.0.0. Its default host is g-<game>.modapi.io; mod.io wants the account's
+        # modapi.io domain from mod.io/me/access, injected through the action's URL override.
         uses: nickelc/upload-to-modio@48cc22afe94d0d93083ba6f49946cef1090153a2
+        env:
+          MODIO_DEBUG_OVERRIDE_URL: ${{ secrets.MODIO_DOMAIN && format('https://{0}.modapi.io/v1/games/{1}/mods/{2}/files', secrets.MODIO_DOMAIN, vars.MODIO_GAME_ID, vars.MODIO_MOD_ID) || '' }}
         with:
           token: ${{ secrets.MODIO_TOKEN }}
           game: ${{ vars.MODIO_GAME_ID }}
