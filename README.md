@@ -121,7 +121,8 @@ mod/                    installable mod (packaged into the ZIP)
 tests/test_mod.py       static checks, patch simulation, upstream checks
 tools/package.py        reproducible ZIP builder
 reference/verified.md   sources and evidence for every GUID and assumption
-media/modio-logo.png    1024×576 logo for the mod.io page (not in the ZIP)
+media/modio-logo.png    mod.io listing image, 1920×1080 (not in the ZIP)
+media/modio-chains.png  mod.io gallery image: production chains
 ```
 
 ## Licensing
