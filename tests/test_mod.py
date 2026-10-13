@@ -32,12 +32,15 @@ GAME_LANGUAGES = ("brazilian", "english", "french", "german", "italian", "japane
                   "russian", "simplified_chinese", "spanish", "traditional_chinese")
 OP_TYPES = ("Add", "Remove", "Merge", "Replace", "Append", "Prepend")
 
-# Shaped after the calculator data and the paths Taludas' published patch writes to. Not game data.
-# The negative OasisId mimics a vanilla LineId.
+# The 4831 FactoryBase is copied from vanilla assets.xml (config.rda). The rest is shaped after the
+# calculator data and the paths Taludas' published patch writes to. The negative OasisId mimics a vanilla LineId.
 VANILLA_FIXTURE = f"""<AssetList>
   <Asset><Values><Standard><GUID>{OLIVE_PRESS}</GUID></Standard>
-    <FactoryBase><FactoryInputs><Item><Product>{OLIVES}</Product><Amount>1</Amount></Item></FactoryInputs>
-    <FactoryOutputs><Item><Product>{OLIVE_OIL}</Product><Amount>1</Amount></Item></FactoryOutputs></FactoryBase>
+    <FactoryBase>
+      <FactoryInputs><Item><Product>{OLIVES}</Product><Amount>1</Amount><StorageAmount>3</StorageAmount></Item></FactoryInputs>
+      <FactoryOutputs><Item><Product>{OLIVE_OIL}</Product><Amount>1</Amount><StorageAmount>2</StorageAmount></Item></FactoryOutputs>
+      <CycleTime>90</CycleTime><IsMainFactory>1</IsMainFactory><MaxTransporterRange>30</MaxTransporterRange>
+    </FactoryBase>
   </Values></Asset>
   <Asset><Values><Standard><GUID>31806</GUID></Standard>
     <ProductionChain><Building>{OLIVE_PRESS}</Building><Tier1><Item><Building>2699</Building></Item></Tier1></ProductionChain>
@@ -149,6 +152,14 @@ def apply_modops(doc, modops, only_guids=None):
 
 def inputs(doc, guid):
     return [i.findtext("Product") for i in find_values(doc, guid).findall("FactoryBase/FactoryInputs/Item")]
+
+
+def recipe(doc):
+    """Olive Press {Product: (Amount, StorageAmount)} per side, plus CycleTime."""
+    fb = find_values(doc, OLIVE_PRESS).find("FactoryBase")
+    side = lambda tag: {i.findtext("Product"): (i.findtext("Amount"), i.findtext("StorageAmount"))
+                        for i in fb.findall(f"{tag}/Item")}
+    return {"in": side("FactoryInputs"), "out": side("FactoryOutputs"), "cycle": fb.findtext("CycleTime")}
 
 
 def under_olive_press(doc, guid):
@@ -270,6 +281,8 @@ class PatchSimulationTests(unittest.TestCase):
         self.assertEqual([e.text for e in find_values(self.doc, OLIVE_OIL).findall("Text/OasisId")], [LINE_ID])
         self.assertEqual([o.findtext("Product") for o in find_values(self.doc, OLIVE_PRESS).findall(
             "FactoryBase/FactoryOutputs/Item")], [OLIVE_OIL], "output GUID must stay 2149")
+        self.assertEqual(recipe(self.doc), {
+            "in": {OLIVES: ("3", "9"), AMPHORAE: ("1", "3")}, "out": {OLIVE_OIL: ("3", "6")}, "cycle": "270"})
         for guid in PERFUME_CHAINS:
             if find_values(self.doc, guid) is not None:
                 self.assertEqual(under_olive_press(self.doc, guid).count(AMPHORA_WORKSHOP), 1, guid)

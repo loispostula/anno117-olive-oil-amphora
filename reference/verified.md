@@ -57,3 +57,14 @@ Source: [jakobharder/anno-mod-loader docs](https://jakobharder.github.io/anno-mo
 - Unguentarium patches its own chain `1556002102` (`<Locked />`), which does not touch `ProductionChain/Tier1`.
 - `LoadAfter` works: `mod-loader.log` loads `unguentarium-khayi@1.7` right before `olive-oil-amphora-compat@0.1.3`, and no ModOp of ours logs a warning.
 - `IconFilename` on `4831`, `31806` and `55972` changes the build menu and chain view icons; the Tier2 additions on `1556002102` / `1556002103` show the Amphorae Workshop in the perfume chains (0.1.3).
+
+## Vanilla assets.xml (read directly)
+
+Source: `data/base/config/export/assets.xml` (35,065,668 bytes, 40,460 assets) extracted from `maindata/config.rda`, game install of 2026-10-13. No `zz_patchfiles_*.rda` contains a newer copy.
+
+- `4831` FactoryBase: olives `2072` Amount 1 StorageAmount 3; output `2149` Amount 1 StorageAmount 2; CycleTime 90; IsMainFactory 1; MaxTransporterRange 30. **confirmed**
+- `3199` FactoryBase: clay `2086` + resin `31695` (Amount 1, StorageAmount 4 each); output `31700` Amount 1 StorageAmount 3; NeedsFuelInput 1; CycleTime 60. `55962` is the same with mud `2102` and no IsMainFactory. **confirmed**
+- All 144 `FactoryOutputs` Amounts are 1. `FactoryInputs` Amount > 1 (2–10) appears only in `Monument` assets (Colosseum, Hippodrome phases). No `<Amount>` anywhere has a decimal. **confirmed**
+- Tags under `FactoryBase`: CycleTime, IsMainFactory, MaxTransporterRange, NeedsFuelInput, OverrideMaxTransporterRange, FactoryInputs/FactoryOutputs `Item/{Product, Amount, StorageAmount}`. No per-input cycle or chance. `AdditionalOutputCycle` exists only in buffs (`FactoryUpgrade/AdditionalOutput`). **confirmed**
+- No vanilla factory consumes `31700`; residents do (`NeedProduct`). **confirmed**
+- Batched press (3 olives + 1 amphora → 3 oil, CycleTime 270): input Amount > 1 has a vanilla precedent (monuments), output Amount > 1 has none. In-game test 2026-10-13 (0.2.0, new Latium game with `dev/test-unlock`): one completed cycle put 3 Olive Oil Amphorae in the warehouse. **confirmed** for output Amount 3. Before the first cycle ended, the warehouse had given the press 7 olives and 3 amphorae, which fits the press filling its input storage (9 / 3). Run-out check: the 30 olives / 10 amphorae gift (10 batches) was left to run until the press stopped; the user reported the result as matching (1 amphora per 3 oil). **confirmed** (user report).

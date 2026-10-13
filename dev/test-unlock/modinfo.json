@@ -1,0 +1,26 @@
+{
+  "Version": "1.1.0",
+  "Anno": 8,
+  "ModID": "olive-oil-amphora-test-unlock",
+  "Difficulty": "cheat",
+  "GameSetup": {
+    "RequiresNewGame": true,
+    "SafeToRemove": false
+  },
+  "Category": {
+    "English": "Cheat"
+  },
+  "ModName": {
+    "English": "[Dev] Olive Oil in Amphorae - test unlock"
+  },
+  "Description": {
+    "English": "Development only, never ship. Unlocks the olive oil, amphorae and tiles chains at game start and lets their buildings work with Peasants, so the Olive Press recipe can be tested in a fresh Latium game. Also gives 30 olives and 10 amphorae once per game launch to the first owned island."
+  },
+  "Scripts": {
+    "Modules": [
+      "ubi/olive-oil-amphora-test-unlock.lua"
+    ],
+    "Init": "OliveOilTestUnlock = require(\"olive-oil-amphora-test-unlock\")",
+    "Tick": "OliveOilTestUnlock:Tick()"
+  }
+}

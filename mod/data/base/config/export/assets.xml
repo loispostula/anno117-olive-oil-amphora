@@ -8,6 +8,21 @@
       <StorageAmount>3</StorageAmount>
     </Item>
   </ModOp>
+  <!--
+    Batch of 3: 3 olives + 1 amphora -> 3 oil every 270 s. Same oil and olive rate as vanilla
+    (1 per 90 s), one amphora per 3 oil. Storage keeps vanilla's 3 / 2 cycles of buffer.
+  -->
+  <ModOp GUID="4831" Merge="FactoryBase/FactoryInputs/Item[Product='2072']">
+    <Amount>3</Amount>
+    <StorageAmount>9</StorageAmount>
+  </ModOp>
+  <ModOp GUID="4831" Merge="FactoryBase/FactoryOutputs/Item[Product='2149']">
+    <Amount>3</Amount>
+    <StorageAmount>6</StorageAmount>
+  </ModOp>
+  <ModOp GUID="4831" Merge="FactoryBase">
+    <CycleTime>270</CycleTime>
+  </ModOp>
 
   <!-- Production chain views: Latium (31806) and Albion (55972) olive oil. -->
   <ModOp GUID="31806" Add="ProductionChain/Tier1"

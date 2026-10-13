@@ -2,13 +2,13 @@
 
 Compatibility mod for Anno 117: Pax Romana. Olive oil is pressed into amphorae and becomes the **Olive Oil Amphora**, so glass is only needed once, in the perfume chain.
 
-**Status: tested in game on 0.1.2 and 0.1.3 with Unguentarium 1.7** (Roman Oil Lamp Maker not tested yet). See [In-game test checklist](#in-game-test-checklist).
+**Status: tested in game on 0.1.2 and 0.1.3 with Unguentarium 1.7; batch recipe tested on 0.2.0** (Roman Oil Lamp Maker not tested yet). See [In-game test checklist](#in-game-test-checklist).
 
 ## Production chains
 
 | Building | With this mod |
 |---|---|
-| Olive Press `4831` | Olives + **Amphorae** → **Olive Oil Amphora** |
+| Olive Press `4831` | 3 Olives + 1 **Amphorae** → 3 **Olive Oil Amphora** every 270 s (vanilla: 1 olive → 1 oil every 90 s) |
 | Unguentarium `1556002101` | Olive Oil Amphora + Glass + Lavender → Perfume (recipe unchanged) |
 | Oil Lamp Workshop `2100200101` | Clay + Olive Oil Amphora → Oil Lamp (recipe unchanged) |
 
@@ -49,6 +49,7 @@ Run with Unguentarium and Roman Oil Lamp Maker enabled and Taludas' mod disabled
 - [x] Olive Press info panel shows two inputs: Olives and Amphorae. No glass.
 - [x] An Olive Press with olives and amphorae in reach produces "Olive Oil Amphora".
 - [x] An Olive Press without amphorae stops and reports a missing input.
+- [x] Batch recipe (0.2.0): the press delivers 3 oil per cycle and uses 1 amphora per 3 oil. (0.2.0: new Latium game with `dev/test-unlock`, without Unguentarium; 30 olives + 10 amphorae ran out together)
 - [x] The product is named "Amphore d'huile d'olive" / "Olive Oil Amphora", with the amphora icon, in the warehouse, the trade screen and the residence needs panel, in Latium and Albion.
 - [x] Residences still consume amphorae and olive oil amphorae (both household needs work).
 - [x] Latium olive oil production chain view lists the Amphorae Workshop (with Clay Pit and Resin).
@@ -64,9 +65,10 @@ Run with Unguentarium and Roman Oil Lamp Maker enabled and Taludas' mod disabled
 
 - **Partially tested in game.** See the checklist. Roman Oil Lamp Maker and the Taludas incompatibility warning are still unchecked.
 - **Amphorae as a factory input.** Confirmed in game: the Olive Press consumes amphorae and stops without them.
-- **Vanilla XML shape.** The GUIDs come from game data exported by [anno-117-calculator](https://github.com/anno-mods/anno-117-calculator). The XML paths (`FactoryBase/FactoryInputs`, `ProductionChain/Tier1`) are the ones Taludas' published mod patches. `Values/Text/OasisId` is the pattern Unguentarium uses for its products. The raw vanilla `assets.xml` has not been inspected.
+- **Batch recipe.** The game data has no fractional Amount and no per-input cycle, so 1/3 amphora per oil is done as a batch of 3 (see `reference/verified.md`). No vanilla production building outputs more than 1 per cycle; confirmed in game on 0.2.0: 3 oil per cycle, 1 amphora per 3 oil.
+- **Vanilla XML shape.** The Olive Press and Amphorae Workshop blocks were read from the vanilla `assets.xml` (see `reference/verified.md`). `ProductionChain/Tier1` follows Taludas' published patch; `Values/Text/OasisId` follows Unguentarium.
 - **LineId range.** `2001004149` sits in the shared personal range (2.001.000.000 – 2.001.009.999). Reserve a range on [GuidRanges](https://github.com/anno-mods/GuidRanges) before a wide public release.
-- **Input storage.** The Olive Press stores 3 amphorae (`StorageAmount`, same as Taludas' glass). The vanilla value for olives is unknown.
+- **Input storage.** Vanilla stores 3 olives and 2 oil (3 / 2 cycles). The batched press stores 9 olives, 6 oil and 3 amphorae (3 / 2 / 3 batches).
 - **Perfume chain views.** Only the Amphorae Workshop is added under the Olive Press (no Clay Pit / Resin level below it).
 
 ## Development
@@ -92,6 +94,10 @@ Upstream checks read the ZIPs in `UPSTREAM_DIR` (matched by the `ModID` in each 
 | modinfo fields, Require + Optional ⊆ LoadAfter, Taludas incompatible | Load order in a real mod set |
 | Icon files exist, PNG 256×256 | The icon renders |
 | Reproducible ZIP | |
+
+### In-game test mod
+
+`dev/test-unlock/` is a separate cheat mod for testing, never packaged. In a new Latium game it unlocks the olive oil, amphorae and tiles chains at start, lets those buildings use Peasant workers, and gives 30 olives + 10 amphorae once per game launch (Lua, same API as the game's `infinite-material-ubi`). Copy or symlink it next to the mod in `<user documents>/Anno 117 - Pax Romana/mods/`; the Ubisoft cheat mods in `<game>/mods/.ubi` (infinite money / material, hot reload) are enabled in `mods/profiles/default.txt`.
 
 ### CI and releases
 
@@ -119,6 +125,7 @@ mod/                    installable mod (packaged into the ZIP)
   data/base/config/export/assets.xml
   data/base/config/gui/texts_*.xml      name "Olive Oil Amphora", 12 languages
   data/olive-oil-amphora/ui/icon_olive_oil_amphora.png
+dev/test-unlock/        in-game test cheat mod (not packaged)
 tests/test_mod.py       static checks, patch simulation, upstream checks
 tools/package.py        reproducible ZIP builder
 reference/verified.md   sources and evidence for every GUID and assumption

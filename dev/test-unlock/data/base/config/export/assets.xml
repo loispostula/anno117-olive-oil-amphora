@@ -1,0 +1,25 @@
+<ModOps>
+  <!--
+    Development only: lets a fresh Latium game build the whole olive oil chain right away.
+    Trigger 5704 "Trigger Intermediate Level Roman 0.1" is ConditionAlwaysTrue and already unlocks
+    the Timber chain. Vanilla unlocks these pools much later:
+      8973 Roman Olive Oil (olive farm 2699, Olive Press 4831)  -> trigger 3934, 300 Plebeians
+      3760 Roman Amphorae (workshop 3199, resin 31752)          -> trigger 3934, 300 Plebeians
+      3745 Roman Tiles (clay pit 2970, charcoal burner 2880)    -> trigger 3784, 1 Plebeian
+  -->
+  <ModOp GUID="5704" Add="Trigger/TriggerActions/Item/TriggerAction/Values/ActionUnlockAsset/UnlockAssets">
+    <Item><Asset>8973</Asset></Item>
+    <Item><Asset>3760</Asset></Item>
+    <Item><Asset>3745</Asset></Item>
+  </ModOp>
+
+  <!--
+    These buildings need Plebeian workforce (2184); a fresh game only has Peasants (2181), which the
+    olive farm already uses. Swap the workforce product, keep the amount.
+  -->
+  <ModOp GUID="4831" Merge="Maintenance/Maintenances/Item[Product='2184']"><Product>2181</Product></ModOp>
+  <ModOp GUID="3199" Merge="Maintenance/Maintenances/Item[Product='2184']"><Product>2181</Product></ModOp>
+  <ModOp GUID="2970" Merge="Maintenance/Maintenances/Item[Product='2184']"><Product>2181</Product></ModOp>
+  <ModOp GUID="31752" Merge="Maintenance/Maintenances/Item[Product='2184']"><Product>2181</Product></ModOp>
+  <ModOp GUID="2880" Merge="Maintenance/Maintenances/Item[Product='2184']"><Product>2181</Product></ModOp>
+</ModOps>

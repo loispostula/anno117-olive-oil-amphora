@@ -1,5 +1,5 @@
 {
-  "Version": "0.1.5",
+  "Version": "0.2.0",
   "Anno": 8,
   "ModID": "olive-oil-amphora-compat",
   "Difficulty": "harder",
@@ -33,8 +33,8 @@
     "French": "Huile d'olive en amphores"
   },
   "Description": {
-    "English": "The Olive Press needs amphorae: olives + amphorae -> Olive Oil Amphora (renamed olive oil, amphora icon). Perfume (Unguentarium) and oil lamps keep their recipes and now consume the Olive Oil Amphora. Replaces 'Olive Oil Needs Glass' (Taludas), which is incompatible.",
-    "French": "Le pressoir à olives a besoin d'amphores : olives + amphores -> Amphore d'huile d'olive (huile d'olive renommée, icône amphore). Le parfum (Unguentarium) et les lampes à huile gardent leurs recettes et consomment l'amphore d'huile d'olive. Remplace 'Olive Oil Needs Glass' (Taludas), incompatible."
+    "English": "The Olive Press needs amphorae: 3 olives + 1 amphora -> 3 Olive Oil Amphorae (renamed olive oil, amphora icon). Perfume (Unguentarium) and oil lamps keep their recipes and now consume the Olive Oil Amphora. Replaces 'Olive Oil Needs Glass' (Taludas), which is incompatible.",
+    "French": "Le pressoir à olives a besoin d'amphores : 3 olives + 1 amphore -> 3 amphores d'huile d'olive (huile d'olive renommée, icône amphore). Le parfum (Unguentarium) et les lampes à huile gardent leurs recettes et consomment l'amphore d'huile d'olive. Remplace 'Olive Oil Needs Glass' (Taludas), incompatible."
   },
   "KnownIssues": [
     {
